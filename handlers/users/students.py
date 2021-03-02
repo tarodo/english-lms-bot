@@ -6,7 +6,7 @@ from loader import dp
 
 
 @dp.message_handler(Command(commands="reg"))
-async def bot_start(message: types.Message):
+async def new_student(message: types.Message):
     user = message.from_user
     res = student_registration(user.id, first_name=user.first_name, last_name=user.last_name, username=user.username,
                                is_student=True)
@@ -16,4 +16,3 @@ async def bot_start(message: types.Message):
         await message.answer(f"Вы уже в системе, {user.full_name}!")
     else:
         await message.answer(f"{user.full_name}, у нас проблемка №{res}, обратитесь к администратору!")
-
