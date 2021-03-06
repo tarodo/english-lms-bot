@@ -12,10 +12,10 @@ def auth_head():
     }
 
 
-def wordset_create(wordset_name, **kwargs):
+def wordset_create(wordset_name, student_id, **kwargs):
     payload = {
         'name': wordset_name,
-        'student': 4
+        'student': student_id
     }
     payload.update(kwargs)
     headers = auth_head()

@@ -9,13 +9,13 @@ def give_token():
         'email': AUTH_NAME,
         'password': AUTH_PASS
     }
-    logging.error('request token')
+    logging.info('request token')
     res = requests.post(API_AUTH_ADDRESS, payload)
     if res.status_code == 200:
         return res.json()['token']
     else:
-        logging.error(res.text)
+        logging.info(res.text)
 
 
 API_TOKEN = give_token()
-logging.error(API_TOKEN)
+logging.info(API_TOKEN)

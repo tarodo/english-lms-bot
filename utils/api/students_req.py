@@ -6,26 +6,29 @@ STUDENTS_URL = API_ADDRESS + 'trainer/students/'
 
 
 def auth_head():
-    """Create headers part about authorization"""
+    """Creates headers part about authorization"""
     return {
         'Authorization': 'Token ' + API_TOKEN
     }
 
 
 def is_student_exists(tg_id):
-    """Check api for student existing"""
+    """Checks api for student existing. Returns id if it exists"""
     params = {
         'tg_id': tg_id
     }
     headers = auth_head()
     res = requests.get(STUDENTS_URL, params=params, headers=headers)
-    if res.status_code == 200 and len(res.json()) == 0:
-        return False
-    return True
+    if res.status_code == 200:
+        if len(res.json()) == 0:
+            return None
+        else:
+            return int(res.json()[0]['id'])
+    return None
 
 
 def student_registration(tg_id, **kwargs):
-    """Register new student. Return status of a request, or -1 if student exists"""
+    """Registers new student. Returns status of a request, or -1 if student exists"""
     if not is_student_exists(tg_id):
         payload = {
             'tg_id': tg_id

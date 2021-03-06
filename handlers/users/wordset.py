@@ -14,10 +14,10 @@ async def create_wordset(message: types.Message):
 
 
 @dp.message_handler(state=WordSetState.Create)
-async def wordsset_set_newname(message: types.Message):
+async def wordsset_set_newname(message: types.Message, student_id: int):
     user = message.from_user
     new_name = message.text
-    res = wordset_create(new_name)
+    res = wordset_create(new_name, student_id=student_id)
     if res == 201:
         await message.answer(f'Создан новый Сэт: "{new_name}"')
     else:
