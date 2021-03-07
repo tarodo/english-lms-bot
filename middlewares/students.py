@@ -2,7 +2,7 @@ from aiogram import types, Dispatcher
 from aiogram.dispatcher.middlewares import BaseMiddleware
 
 from loader import storage
-from utils.api.students_req import is_student_exists
+from utils.api.students_req import student_id
 
 
 REDIS_STUDENT_ID_PREFIX = 'students:user_id:'
@@ -15,7 +15,7 @@ class GetUser(BaseMiddleware):
         tg_id = message.from_user.id
         db_id = await redis.get(REDIS_STUDENT_ID_PREFIX + str(tg_id))
         if db_id is None:
-            db_id = is_student_exists(tg_id)
+            db_id = student_id(tg_id)
             await redis.set(REDIS_STUDENT_ID_PREFIX + str(tg_id), db_id)
         else:
             db_id = int(db_id)

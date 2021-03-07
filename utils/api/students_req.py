@@ -12,7 +12,7 @@ def auth_head():
     }
 
 
-def is_student_exists(tg_id):
+def student_id(tg_id):
     """Checks api for student existing. Returns id if it exists"""
     params = {
         'tg_id': tg_id
@@ -29,7 +29,7 @@ def is_student_exists(tg_id):
 
 def student_registration(tg_id, **kwargs):
     """Registers new student. Returns status of a request, or -1 if student exists"""
-    if not is_student_exists(tg_id):
+    if not student_id(tg_id):
         payload = {
             'tg_id': tg_id
         }
