@@ -1,4 +1,7 @@
 import requests
+
+from aiogram.utils.markdown import hbold
+
 from data.config import API_ADDRESS
 from .auth import API_TOKEN
 
@@ -9,17 +12,22 @@ class WordSet:
     def __init__(self, name, set_id):
         self.name = name
         self.id = set_id
+        self.words_cnt = 0
+        self.progress = 0
+
+    def tg_message(self) -> str:
+        return f'{hbold(self.name)} :: Слов - {self.words_cnt} :: {hbold(self.progress) + hbold(" %")}'
 
 
 class WordSetList:
     def __init__(self, wordset_db: list = None):
         self.sets = []
-        self.page_step = 3
+        self.page_step = 6
         if wordset_db:
             for wset in wordset_db:
                 self.sets.append(WordSet(name=wset['name'], set_id=wset['id']))
 
-    def pages(self):
+    def pages(self) -> int:
         """Return count of pages"""
         return (len(self.sets) - 1) // self.page_step + 1
 
@@ -37,15 +45,18 @@ class WordSetList:
         one_page.sets = self.sets[first_set:last_set]
         return one_page, prev_page, next_page
 
+    def tg_message(self) -> str:
+        return "\n".join([wset.tg_message() for wset in self.sets])
 
-def auth_head():
+
+def auth_head() -> dict:
     """Create headers part about authorization"""
     return {
         'Authorization': 'Token ' + API_TOKEN
     }
 
 
-def wordset_create(wordset_name, student_id, **kwargs):
+def wordset_create(wordset_name, student_id, **kwargs) -> int:
     payload = {
         'name': wordset_name,
         'student': student_id
@@ -55,7 +66,7 @@ def wordset_create(wordset_name, student_id, **kwargs):
     return res.status_code
 
 
-def wordsets(student_id, **kwargs):
+def wordsets(student_id, **kwargs) -> 'WordSetList':
     params = {
         'student': student_id
     }
